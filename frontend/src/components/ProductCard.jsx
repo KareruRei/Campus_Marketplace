@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
+import { Star } from 'lucide-react';
 
-export const ProductCard = ({ title, price, category, image, description }) => {
+export const ProductCard = ({ 
+  title, 
+  price, 
+  category, 
+  image, 
+  description,
+  dateAdded,
+  seller
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = (e) => {
@@ -35,7 +44,9 @@ export const ProductCard = ({ title, price, category, image, description }) => {
           </h3>
           <div className="flex items-center justify-between">
             <span className="text-sm font-bold text-black">${price}</span>
-            <span className="text-[10px] text-gray-400 font-semibold uppercase">New</span>
+            <span className="text-[10px] text-gray-400 font-semibold uppercase">
+              {dateAdded || "Today"}
+            </span>
           </div>
         </div>
       </div>
@@ -43,7 +54,7 @@ export const ProductCard = ({ title, price, category, image, description }) => {
       {isOpen && (
         <div 
           onClick={toggleModal}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-black/60 backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-black/60 backdrop-blur-sm"
         >
           <div 
             onClick={(e) => e.stopPropagation()} 
@@ -51,9 +62,9 @@ export const ProductCard = ({ title, price, category, image, description }) => {
           >
             <button 
               onClick={toggleModal}
-              className="absolute top-6 right-6 z-10 text-black hover:rotate-90 transition-transform duration-300 bg-white/50 backdrop-blur-md rounded-full p-1"
+              className="absolute top-6 right-6 z-10 text-black hover:rotate-90 transition-transform duration-300 bg-white/60 backdrop-blur-md rounded-full p-1"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              ✕
             </button>
 
             <div className="md:w-[55%] bg-[#f4f4f4] overflow-y-auto scrollbar-hide">
@@ -66,9 +77,17 @@ export const ProductCard = ({ title, price, category, image, description }) => {
                 Home / {category} / {title}
               </nav>
               
-              <h1 className="text-3xl font-bold text-black mb-2 uppercase tracking-tight">
+              <h1 className="text-3xl font-bold text-black mb-1 uppercase tracking-tight">
                 {title}
               </h1>
+
+              {/* Meta Info */}
+              <div className="flex items-center gap-4 text-[11px] text-gray-400 uppercase tracking-widest mb-6">
+                <span>Posted by {seller || "Anonymous"}</span>
+                <span>•</span>
+                <span>{dateAdded || "Today"}</span>
+              </div>
+
               <p className="text-2xl font-light text-black mb-8">${price}</p>
               
               <div className="border-t border-gray-100 py-6 mb-4">
@@ -80,13 +99,18 @@ export const ProductCard = ({ title, price, category, image, description }) => {
 
               <div className="space-y-3 mt-auto">
                 <div className="flex-1 border border-black py-4 text-center text-xs font-bold hover:bg-black hover:text-white transition-colors cursor-pointer uppercase tracking-widest">
-                    Select Size
+                  Select Size
                 </div>
+
                 <button className="w-full bg-black text-white py-5 text-sm font-bold tracking-[0.2em] hover:bg-zinc-800 transition-all uppercase">
                   Add to Bag
                 </button>
-                <button className="w-full border border-gray-200 py-4 text-xs font-bold tracking-widest hover:border-black transition-colors uppercase text-gray-500 hover:text-black">
-                  Add to Wishlist
+
+                <button className="w-full border border-gray-200 py-4 text-xs font-bold tracking-widest 
+                  hover:border-black hover:bg-black hover:text-white transition-all uppercase 
+                  text-gray-500 flex items-center justify-center gap-2">
+                  <Star size={16} />
+                  Add to Favorites
                 </button>
               </div>
             </div>

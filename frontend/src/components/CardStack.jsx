@@ -52,7 +52,7 @@ export const CardStack = () => {
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{ opacity: 0, x: -100, scale: 0.95 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="absolute w-[300px] bg-white rounded-2xl overflow-hidden p-4 flex flex-col "
+          className="absolute w-[270px] rounded-2xl overflow-hidden p-4 flex flex-col "
         >
           <ProductCard
             title={products[index].title}
