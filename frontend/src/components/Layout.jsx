@@ -1,19 +1,16 @@
-import { Sidebar } from './Sidebar';
+import { Navbar } from './Navbar';
 
-export const Layout = ({ children, isCollapsed, setIsCollapsed }) => {
+export const Layout = ({ children }) => {
   return (
-    <div className="flex min-h-screen bg-gray-50/50">
-      <Sidebar 
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
-        cartCount={3} // Placeholder for cart item count, replace with actual state when available
-        messageCount={5} // Placeholder for message count, replace with actual state when available
-        favoritesCount={12} // Placeholder for favorites count, replace with actual state when available
-        transactionsCount={6} // Placeholder for transactions count, replace with actual state when available
-      />
+    /* Removed overflow-hidden from here so the body can scroll by default */
+    <div className="min-h-screen flex flex-col bg-gray-50/30">
+      <Navbar cartCount={3} messageCount={5} />
 
-      <main className="flex-1 ml-24 p-8 min-h-screen">
-        <div className="max-w-7xl mx-auto">
+      {/* We use 'flex-1' so this area fills the screen.
+         We do NOT put overflow-hidden here. 
+      */}
+      <main className="flex-1 mt-24">
+        <div className="h-full w-full max-w-7xl mx-auto px-4">
           {children}
         </div>
       </main>
