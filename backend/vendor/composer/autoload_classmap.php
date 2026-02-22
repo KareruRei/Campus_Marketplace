@@ -6,7 +6,15 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => $baseDir . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
+    'App\\Http\\Controllers\\Auth\\EmailVerificationNotificationController' => $baseDir . '/app/Http/Controllers/Auth/EmailVerificationNotificationController.php',
+    'App\\Http\\Controllers\\Auth\\NewPasswordController' => $baseDir . '/app/Http/Controllers/Auth/NewPasswordController.php',
+    'App\\Http\\Controllers\\Auth\\PasswordResetLinkController' => $baseDir . '/app/Http/Controllers/Auth/PasswordResetLinkController.php',
+    'App\\Http\\Controllers\\Auth\\RegisteredUserController' => $baseDir . '/app/Http/Controllers/Auth/RegisteredUserController.php',
+    'App\\Http\\Controllers\\Auth\\VerifyEmailController' => $baseDir . '/app/Http/Controllers/Auth/VerifyEmailController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Middleware\\EnsureEmailIsVerified' => $baseDir . '/app/Http/Middleware/EnsureEmailIsVerified.php',
+    'App\\Http\\Requests\\Auth\\LoginRequest' => $baseDir . '/app/Http/Requests/Auth/LoginRequest.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
@@ -6287,6 +6295,10 @@ return array(
     'Termwind\\ValueObjects\\Node' => $vendorDir . '/nunomaduro/termwind/src/ValueObjects/Node.php',
     'Termwind\\ValueObjects\\Style' => $vendorDir . '/nunomaduro/termwind/src/ValueObjects/Style.php',
     'Termwind\\ValueObjects\\Styles' => $vendorDir . '/nunomaduro/termwind/src/ValueObjects/Styles.php',
+    'Tests\\Feature\\Auth\\AuthenticationTest' => $baseDir . '/tests/Feature/Auth/AuthenticationTest.php',
+    'Tests\\Feature\\Auth\\EmailVerificationTest' => $baseDir . '/tests/Feature/Auth/EmailVerificationTest.php',
+    'Tests\\Feature\\Auth\\PasswordResetTest' => $baseDir . '/tests/Feature/Auth/PasswordResetTest.php',
+    'Tests\\Feature\\Auth\\RegistrationTest' => $baseDir . '/tests/Feature/Auth/RegistrationTest.php',
     'Tests\\Feature\\ExampleTest' => $baseDir . '/tests/Feature/ExampleTest.php',
     'Tests\\TestCase' => $baseDir . '/tests/TestCase.php',
     'Tests\\Unit\\ExampleTest' => $baseDir . '/tests/Unit/ExampleTest.php',
