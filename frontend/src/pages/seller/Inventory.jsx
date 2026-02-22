@@ -12,7 +12,7 @@ export default function Inventory() {
     <div className="max-w-7xl mx-auto p-8 lg:p-12">
       <header className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Warehouse Stock</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Marketly/Inventory</p>
           <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none">Inventory</h1>
         </div>
         

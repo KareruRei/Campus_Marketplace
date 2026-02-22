@@ -13,6 +13,7 @@ import { Landing } from './pages/Landing';
 import { Cart } from './pages/Cart';
 import { Messages } from './pages/Messages';
 import { Transactions } from './pages/Transactions';
+import AdminDashboard from "./pages/AdminDashboard";
 
 // A small helper component to determine if the layout should be fixed-height
 const AppContent = ({ isCollapsed, setIsCollapsed }) => {
@@ -38,6 +39,7 @@ const AppContent = ({ isCollapsed, setIsCollapsed }) => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/transactions" element={<Transactions />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Layout>
   );

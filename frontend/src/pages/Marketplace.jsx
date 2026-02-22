@@ -58,7 +58,7 @@ export const Marketplace = () => {
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                 <Search size={14} className="text-black" />
               </div>
-              <input 
+              <input
                 type="text"
                 placeholder="Find items..."
                 value={searchQuery}
