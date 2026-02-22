@@ -8,13 +8,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SellerDashboard() {
   const [selectedTx, setSelectedTx] = useState(null);
+  const [showHistory, setShowHistory] = useState(false);
 
   const stats = [
     { label: 'Total Sales', value: '₱245,250', color: 'text-emerald-500', icon: <TrendingUp size={20} />, growth: '+12.5%' },
     { label: 'Active Orders', value: '12', color: 'text-indigo-600', icon: <Package size={20} />, growth: '2 new' },
   ];
 
-  // Expanded data for the popup
   const recentSales = [
     { 
       id: '#4821', product: 'MacBook Pro 2020', status: 'Shipped', amount: '₱48,500', 
@@ -24,25 +24,34 @@ export default function SellerDashboard() {
       id: '#4820', product: 'Ergonomic Chair', status: 'Processing', amount: '₱6,200', 
       date: 'Feb 22, 2026', buyer: 'Jane Smith', payment: 'Bank Transfer', orderId: 'ORD-8842' 
     },
+    { 
+      id: '#4819', product: 'Sony WH-1000XM4', status: 'Delivered', amount: '₱12,500', 
+      date: 'Feb 20, 2026', buyer: 'Mike Ross', payment: 'GCash', orderId: 'ORD-7721' 
+    },
+    { 
+      id: '#4818', product: 'iPhone 13 Mini', status: 'Delivered', amount: '₱32,000', 
+      date: 'Feb 19, 2026', buyer: 'Rachel Zane', payment: 'Maya', orderId: 'ORD-6612' 
+    },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto p-8 lg:p-12 pt-32 relative">
+    <div className="max-w-7xl mx-auto p-8 lg:p-12 pt-32 relative text-black">
       
       {/* --- TRANSACTION DETAIL POPUP --- */}
       <AnimatePresence>
         {selectedTx && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setSelectedTx(null)}
-              className="absolute inset-0 bg-black/40 backdrop-blur-md"
+              className="absolute inset-0 bg-black/20 backdrop-blur-md"
             />
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-xl bg-white border-4 border-black rounded-[40px] shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] overflow-hidden"
+              // SHADOW REMOVED BELOW
+              className="relative w-full max-w-xl bg-white border-4 border-black rounded-[40px] overflow-hidden shadow-xl"
             >
               <div className="bg-black p-8 text-white flex justify-between items-center">
                 <div className="flex items-center gap-3">
@@ -99,9 +108,8 @@ export default function SellerDashboard() {
                   </div>
                 </div>
               </div>
-
               <div className="p-8 bg-gray-50 flex gap-4">
-                <button onClick={() => setSelectedTx(null)} className="flex-1 py-4 bg-black text-white font-black uppercase tracking-widest text-xs hover:bg-indigo-600 transition-all transform active:scale-95">
+                <button onClick={() => setSelectedTx(null)} className="flex-1 py-4 bg-black text-white font-black uppercase tracking-widest text-xs hover:bg-gray-800 transition-all rounded-xl transform active:scale-95">
                   Dismiss
                 </button>
               </div>
@@ -110,6 +118,72 @@ export default function SellerDashboard() {
         )}
       </AnimatePresence>
 
+      {/* --- ALL TRANSACTIONS LIST POPUP --- */}
+      <AnimatePresence>
+        {showHistory && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setShowHistory(false)}
+              className="absolute inset-0 bg-black/20 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 30 }}
+              // SHADOW REMOVED BELOW
+              className="relative w-full max-w-4xl bg-white border-4 border-black rounded-[2.5rem] flex flex-col max-h-[80vh] overflow-hidden shadow-2xl"
+            >
+              <div className="p-10 border-b-2 border-black flex justify-between items-center sticky top-0 bg-white z-10">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Activity Log</p>
+                  <h3 className="text-4xl font-black tracking-tighter uppercase italic leading-none">History</h3>
+                </div>
+                <button 
+                  onClick={() => setShowHistory(false)} 
+                  className="size-12 bg-black text-white rounded-2xl flex items-center justify-center hover:bg-gray-800 transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="p-10 overflow-y-auto space-y-4">
+                {recentSales.map((sale) => (
+                  <div 
+                    key={sale.id} 
+                    onClick={() => setSelectedTx(sale)}
+                    className="flex items-center justify-between p-6 border-2 border-slate-100 rounded-[2rem] hover:border-black hover:bg-slate-50 transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-6">
+                      <div className="hidden sm:flex size-12 bg-black text-white rounded-xl items-center justify-center font-black text-[10px] italic">
+                        BOX
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{sale.id}</p>
+                        <p className="font-black uppercase tracking-tight text-lg group-hover:text-gray-600 transition-colors">{sale.product}</p>
+                      </div>
+                    </div>
+                    <div className="text-right flex items-center gap-8">
+                      <div className="hidden md:block">
+                        <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Status</p>
+                        <span className="text-[10px] font-black uppercase px-3 py-1 bg-emerald-100 text-emerald-600 rounded-lg border border-emerald-200">
+                          {sale.status}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Amount</p>
+                        <p className="font-black text-2xl tracking-tighter leading-none">{sale.amount}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* --- DASHBOARD CONTENT --- */}
       <header className="mb-12">
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Management Console</p>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none">Dashboard</h1>
@@ -145,12 +219,12 @@ export default function SellerDashboard() {
         <div className="md:col-span-3 mt-4">
           <div className="p-8 border-2 border-black rounded-[2.5rem] bg-white/60 backdrop-blur-md shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-center gap-3 mb-10 text-center">
-              <Clock size={24} className="text-indigo-500" />
+              <Clock size={24} className="text-gray-500" />
               <h3 className="text-3xl font-black uppercase tracking-tighter">Recent Orders</h3>
             </div>
             
             <div className="max-w-4xl mx-auto space-y-4">
-              {recentSales.map((sale) => (
+              {recentSales.slice(0, 2).map((sale) => (
                 <div 
                   key={sale.id} 
                   onClick={() => setSelectedTx(sale)}
@@ -162,7 +236,7 @@ export default function SellerDashboard() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{sale.id}</p>
-                      <p className="font-black uppercase tracking-tight text-lg group-hover:text-indigo-600 transition-colors">{sale.product}</p>
+                      <p className="font-black uppercase tracking-tight text-lg group-hover:text-gray-600 transition-colors">{sale.product}</p>
                     </div>
                   </div>
                   <div className="text-right flex items-center gap-8">
@@ -181,14 +255,16 @@ export default function SellerDashboard() {
               ))}
 
               <div className="pt-6 flex justify-center">
-                <button className="px-10 py-4 border-2 border-black rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-black hover:text-white transition-all transform active:scale-95 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none">
+                <button 
+                    onClick={() => setShowHistory(true)}
+                    className="px-10 py-4 border-2 border-black rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-black hover:text-white transition-all transform active:scale-95 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none"
+                >
                   View All Transactions
                 </button>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

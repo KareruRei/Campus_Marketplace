@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShoppingBag, ShoppingCart, MessageCircle, 
-  Package, BarChart3, PlusCircle, Repeat, User, LogOut, Settings
+  Package, BarChart3, PlusCircle, Repeat, User, LogOut, Settings, ListOrdered 
 } from 'lucide-react';
 
 import logoImg from '../assets/imgs/logo.png';
@@ -25,6 +25,7 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
 
   const sellerItems = [
     { id: 'dash', name: 'Dashboard', path: '/seller/dashboard', icon: <BarChart3 size={20} /> },
+    { id: 'orders', name: 'Orders', path: '/seller/orders', icon: <ListOrdered size={20} /> },
     { id: 'inv', name: 'Inventory', path: '/seller/inventory', icon: <Package size={20} /> },
     { id: 'add', name: 'Add Product', path: '/seller/add', icon: <PlusCircle size={20} /> },
   ];

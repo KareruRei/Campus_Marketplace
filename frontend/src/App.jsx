@@ -7,15 +7,15 @@ import { Marketplace } from './pages/Marketplace';
 import SellerDashboard from './pages/seller/Dashboard';
 import Inventory from './pages/seller/Inventory';
 import AddProduct from './pages/seller/AddProduct';
+import { SellerOrders } from './pages/seller/SellerOrders';
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
 import { Landing } from './pages/Landing';
 import { Cart } from './pages/Cart';
 import { Messages } from './pages/Messages';
-import { Transactions } from './pages/Transactions';
+import { Transactions } from './pages/Transactions'; // Import for the buyer orders
 import AdminDashboard from "./pages/AdminDashboard";
 
-// A small helper component to determine if the layout should be fixed-height
 const AppContent = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
   
@@ -30,15 +30,20 @@ const AppContent = ({ isCollapsed, setIsCollapsed }) => {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/marketplace" element={<Marketplace />} />
+        
+        {/* --- SELLER ROUTES --- */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
+        <Route path="/seller/orders" element={<SellerOrders />} /> {/* <--- ADDED THIS */}
         <Route path="/seller/inventory" element={<Inventory />} />
         <Route path="/seller/add" element={<AddProduct />} />
+        
+        {/* --- BUYER ROUTES --- */}
         <Route path="/marketplace/:category" element={<Marketplace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/messages" element={<Messages />} />
-        <Route path="/transactions" element={<Transactions />} />
+        <Route path="/transactions" element={<Transactions />} /> {/* Buyer Orders Page */}
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Layout>

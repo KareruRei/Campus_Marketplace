@@ -1,102 +1,97 @@
-import React from 'react';
-import { Upload, DollarSign, Package, Tag, ArrowLeft, AlignLeft } from 'lucide-react';
+import React, { useState } from 'react';
+import { Upload, Package, Tag, ArrowLeft, AlignLeft, Smartphone, Watch, Box, Shirt } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function AddProduct() {
+  const [selectedCategory, setSelectedCategory] = useState('electronics');
+
+  const categories = [
+    { id: 'electronics', label: 'Tech', icon: <Smartphone size={20} /> },
+    { id: 'wearables', label: 'Watch', icon: <Watch size={20} /> },
+    { id: 'accessories', label: 'Gear', icon: <Box size={20} /> },
+    { id: 'fashion', label: 'Style', icon: <Shirt size={20} /> },
+  ];
+
   return (
-    <div className="max-w-6xl mx-auto p-8 lg:p-12 pt-32">
-      <div className="flex justify-between items-end mb-10">
+    <div className="max-w-6xl mx-auto p-6 lg:p-12 pt-32">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
         <div>
           <Link to="/seller/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-4 hover:text-indigo-600 transition-colors group">
             <ArrowLeft size={14} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" /> 
             Back to Dashboard
           </Link>
-          <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none">List Product</h1>
+          <h1 className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-none">List Product</h1>
         </div>
-        <p className="hidden md:block text-right text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">
-          Marketly / New Listing
-        </p>
       </div>
 
-      <div className="bg-white/40 backdrop-blur-xl rounded-[3rem] border-2 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+      <div className="bg-white rounded-[3rem] border-4 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
         <form className="flex flex-col lg:flex-row">
           
-          <div className="lg:w-5/12 p-10 border-b-2 lg:border-b-0 lg:border-r-2 border-black bg-white/20">
-            <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest mb-6">
-              Product Media
-            </label>
-            <div className="group relative aspect-square border-4 border-dashed border-black/10 rounded-[2.5rem] flex flex-col items-center justify-center text-center hover:border-indigo-500 hover:bg-white transition-all cursor-pointer overflow-hidden">
-              <div className="size-20 bg-black text-white rounded-3xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
-                <Upload size={32} />
-              </div>
-              <p className="text-sm font-black uppercase tracking-tight">Upload Main Image</p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">Drag and drop or click</p>
-              
-              <div className="absolute bottom-4 right-4 opacity-10 group-hover:opacity-100 transition-opacity">
-                 <Package size={40} />
-              </div>
+          {/* --- MEDIA COLUMN --- */}
+          <div className="lg:w-1/2 p-8 lg:p-12 border-b-4 lg:border-b-0 lg:border-r-4 border-black bg-slate-50">
+            <label className="text-xs font-black uppercase tracking-widest mb-6 block">Product Media</label>
+            <div className="group relative aspect-square bg-white border-4 border-dashed border-black rounded-[2.5rem] flex flex-col items-center justify-center text-center hover:bg-indigo-50 hover:border-indigo-600 transition-all cursor-pointer overflow-hidden">
+              <Upload size={48} strokeWidth={3} className="mb-4" />
+              <p className="text-lg font-black uppercase tracking-tight">Add Photo</p>
             </div>
           </div>
 
-          <div className="lg:w-7/12 p-10 flex flex-col justify-between">
-            <div className="space-y-8">
-              <div>
-                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest mb-3 ml-2">
-                  <Tag size={14} /> Product Name
-                </label>
-                <input 
-                  type="text" 
-                  className="w-full p-5 bg-white border-2 border-black rounded-2xl font-black text-lg placeholder:text-slate-300 focus:shadow-[4px_4px_0px_0px_rgba(99,102,241,1)] focus:border-indigo-600 outline-none transition-all" 
-                  placeholder="e.g. Vintage 35mm Camera" 
-                />
-              </div>
+          {/* --- DETAILS COLUMN --- */}
+          <div className="lg:w-1/2 p-8 lg:p-12 bg-white space-y-8">
+            
+            {/* Name */}
+            <div>
+              <label className="text-[10px] font-black uppercase tracking-widest mb-4 block text-slate-400">Product Name</label>
+              <input type="text" className="w-full p-5 border-2 border-black rounded-2xl font-black text-lg focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] outline-none transition-all" placeholder="Item Name..." />
+            </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest mb-3 ml-2">
-                    <DollarSign size={14} /> Price
-                  </label>
-                  <input 
-                    type="number" 
-                    className="w-full p-5 bg-white border-2 border-black rounded-2xl font-black text-3xl tracking-tighter focus:shadow-[4px_4px_0px_0px_rgba(99,102,241,1)] outline-none transition-all" 
-                    placeholder="0.00" 
-                  />
-                </div>
-
-                <div>
-                  <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest mb-3 ml-2">
-                    <Package size={14} /> Stock
-                  </label>
-                  <input 
-                    type="number" 
-                    className="w-full p-5 bg-white border-2 border-black rounded-2xl font-black text-3xl tracking-tighter focus:shadow-[4px_4px_0px_0px_rgba(99,102,241,1)] outline-none transition-all" 
-                    placeholder="1" 
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest mb-3 ml-2">
-                  <AlignLeft size={14} /> Description
-                </label>
-                <textarea 
-                  rows="3"
-                  className="w-full p-5 bg-white border-2 border-black rounded-2xl font-bold placeholder:text-slate-300 focus:shadow-[4px_4px_0px_0px_rgba(99,102,241,1)] outline-none transition-all resize-none"
-                  placeholder="Tell buyers about your item..."
-                ></textarea>
+            {/* --- CIRCULAR CATEGORY BUTTONS --- */}
+            <div>
+              <label className="text-[10px] font-black uppercase tracking-widest mb-4 block text-slate-400">Category</label>
+              <div className="flex flex-wrap gap-4">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`group flex flex-col items-center gap-2 transition-all`}
+                  >
+                    <div className={`
+                      size-16 rounded-full border-4 border-black flex items-center justify-center transition-all
+                      ${selectedCategory === cat.id 
+                        ? 'bg-black text-white shadow-none scale-95 translate-y-1' 
+                        : 'bg-white text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]'}
+                    `}>
+                      {cat.icon}
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-tighter">{cat.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="pt-10 flex items-center gap-6">
-              <button className="flex-1 py-6 bg-black text-white rounded-[2rem] font-black uppercase tracking-[0.2em] text-sm hover:bg-indigo-600 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-x-0 active:translate-y-0 active:shadow-none transition-all">
-                Create Listing
-              </button>
-              <button type="button" className="px-8 py-6 border-2 border-black rounded-[2rem] font-black uppercase tracking-widest text-xs hover:bg-red-50 hover:text-red-500 transition-all">
-                Cancel
-              </button>
+            {/* Price & Stock */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest mb-3 block text-slate-400">₱ Price</label>
+                <input type="number" className="w-full p-5 border-2 border-black rounded-2xl font-black text-2xl focus:shadow-[4px_4px_0px_0px_rgba(34,197,94,1)] outline-none transition-all" placeholder="0" />
+              </div>
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest mb-3 block text-slate-400">Qty</label>
+                <input type="number" className="w-full p-5 border-2 border-black rounded-2xl font-black text-2xl focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] outline-none transition-all" placeholder="1" />
+              </div>
             </div>
+
+            {/* Description */}
+            <div>
+              <label className="text-[10px] font-black uppercase tracking-widest mb-3 block text-slate-400">Description</label>
+              <textarea rows="3" className="w-full p-5 border-2 border-black rounded-2xl font-bold focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] outline-none transition-all resize-none" placeholder="Details..."></textarea>
+            </div>
+
+            <button className="w-full py-6 bg-black text-white rounded-2xl font-black uppercase tracking-[0.2em] hover:shadow-[8px_8px_0px_0px_rgba(99,102,241,1)] hover:-translate-y-1 transition-all active:translate-y-0 active:shadow-none">
+              Publish Listing
+            </button>
           </div>
-
         </form>
       </div>
     </div>

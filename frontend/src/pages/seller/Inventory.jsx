@@ -1,104 +1,180 @@
-import React from 'react';
-import { Edit3, Trash2, Plus, AlertCircle, MoreHorizontal } from 'lucide-react';
+import React, { useState } from 'react';
+import { Edit3, X, Minus, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// --- TABLE-SPECIFIC CHUNKY SCROLLBAR ---
+const tableScrollStyles = `
+  .custom-table-scrollbar::-webkit-scrollbar {
+    width: 12px;
+  }
+  .custom-table-scrollbar::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-left: 2px solid black;
+  }
+  .custom-table-scrollbar::-webkit-scrollbar-thumb {
+    background: black;
+    border: 2px solid #ffffff;
+  }
+  .custom-table-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #333;
+  }
+`;
 
 export default function Inventory() {
-  const products = [
-    { id: 1, name: "Wireless Headphones", price: 99, stock: 15, category: "Electronics", image: "https://picsum.photos/200/200" },
-    { id: 2, name: "Smart Watch", price: 149, stock: 3, category: "Wearables", image: "https://picsum.photos/201/201" },
-    { id: 3, name: "Leather Wallet", price: 45, stock: 42, category: "Accessories", image: "https://picsum.photos/202/202" },
-  ];
+  const [products, setProducts] = useState([
+    { id: 1, name: "Wireless Headphones", price: 4999, stock: 15, category: "Electronics", condition: "New", status: "Active", image: "https://picsum.photos/200/200" },
+    { id: 2, name: "Smart Watch", price: 8500, stock: 0, category: "Wearables", condition: "Used", status: "Sold", image: "https://picsum.photos/201/201" },
+    { id: 3, name: "Leather Wallet", price: 1250, stock: 42, category: "Accessories", condition: "New", status: "Removed", image: "https://picsum.photos/202/202" },
+    { id: 4, name: "Canvas Backpack", price: 3200, stock: 12, category: "Accessories", condition: "New", status: "Active", image: "https://picsum.photos/203/203" },
+    { id: 5, name: "Mechanical Keyboard", price: 6800, stock: 5, category: "Electronics", condition: "Used", status: "Active", image: "https://picsum.photos/204/204" },
+    { id: 6, name: "Gaming Mouse", price: 2500, stock: 8, category: "Electronics", condition: "New", status: "Active", image: "https://picsum.photos/205/205" },
+    { id: 7, name: "Desk Mat", price: 950, stock: 20, category: "Accessories", condition: "New", status: "Active", image: "https://picsum.photos/206/206" },
+  ]);
+
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  const STATUS_STYLE = {
+    'Active': 'bg-black text-white border-black',
+    'Sold': 'bg-slate-100 text-slate-500 border-slate-200',
+    'Removed': 'bg-white text-slate-300 border-slate-100 italic',
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    setProducts(products.map(p => p.id === editingProduct.id ? editingProduct : p));
+    setEditingProduct(null);
+  };
 
   return (
-    <div className="max-w-7xl mx-auto p-8 lg:p-12">
-      <header className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+    <div className="max-w-7xl mx-auto p-8 lg:p-12 pt-32 text-black relative font-sans h-screen overflow-hidden">
+      <style>{tableScrollStyles}</style>
+
+      {/* --- EDIT MODAL --- */}
+      <AnimatePresence>
+        {editingProduct && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-end">
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setEditingProduct(null)}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative w-full max-w-md bg-white h-full shadow-[-30px_0px_60px_-15px_rgba(0,0,0,0.3)] flex flex-col border-l-4 border-black"
+            >
+              <div className="p-10 flex justify-between items-center">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Stockroom Editor</p>
+                  <h2 className="text-4xl font-black uppercase italic tracking-tighter">Modify</h2>
+                </div>
+                <button onClick={() => setEditingProduct(null)} className="size-12 flex items-center justify-center bg-slate-100 hover:bg-black hover:text-white rounded-2xl transition-all">
+                  <X size={20} strokeWidth={3} />
+                </button>
+              </div>
+
+              <form onSubmit={handleUpdate} className="px-10 space-y-8 overflow-y-auto flex-1 custom-table-scrollbar">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Product Name</label>
+                  <input 
+                    type="text" 
+                    value={editingProduct.name} 
+                    onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})} 
+                    className="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-black rounded-2xl font-bold outline-none transition-all" 
+                  />
+                </div>
+
+                {/* --- QUANTITY MODIFY SECTION --- */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Stock Quantity</label>
+                  <div className="flex items-center gap-4">
+                    <button 
+                      type="button"
+                      onClick={() => setEditingProduct({...editingProduct, stock: Math.max(0, editingProduct.stock - 1)})}
+                      className="size-14 flex items-center justify-center border-4 border-black rounded-2xl bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all hover:bg-slate-50"
+                    >
+                      <Minus size={20} strokeWidth={4} />
+                    </button>
+                    
+                    <div className="flex-1">
+                      <input 
+                        type="number" 
+                        value={editingProduct.stock}
+                        onChange={(e) => setEditingProduct({...editingProduct, stock: parseInt(e.target.value) || 0})}
+                        className="w-full text-center p-4 bg-slate-50 border-4 border-black rounded-2xl font-black text-xl outline-none"
+                      />
+                    </div>
+
+                    <button 
+                      type="button"
+                      onClick={() => setEditingProduct({...editingProduct, stock: editingProduct.stock + 1})}
+                      className="size-14 flex items-center justify-center border-4 border-black rounded-2xl bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all hover:bg-slate-800"
+                    >
+                      <Plus size={20} strokeWidth={4} />
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <div className="p-10 flex gap-4 bg-white border-t-2 border-slate-100">
+                <button type="submit" onClick={handleUpdate} className="flex-1 py-5 bg-black text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all active:scale-95">
+                  Confirm Changes
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <header className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16 px-4">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Marketly/Inventory</p>
           <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none">Inventory</h1>
         </div>
-        
-        <button className="flex items-center gap-2 px-8 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-indigo-600 transition-all active:scale-95 shadow-[6px_6px_0px_0px_rgba(99,102,241,0.3)] hover:shadow-none">
-          <Plus size={18} strokeWidth={3} />
-          Add New Product
-        </button>
       </header>
 
-      <div className="border-2 border-black rounded-[2.5rem] bg-white overflow-hidden shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
-        <div className="overflow-x-auto">
+      {/* --- THE SCROLLABLE TABLE CONTAINER --- */}
+      <div className="border-4 border-black rounded-[2.5rem] bg-white overflow-hidden shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] mx-4">
+        <div className="overflow-x-auto overflow-y-auto max-h-[380px] custom-table-scrollbar">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b-4 border-black bg-slate-50">
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Product Details</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Category</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Stock Status</th>
+            <thead className="sticky top-0 z-10">
+              <tr className="border-b-4 border-black bg-white">
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Product</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Type</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Status</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-center">Qty</th>
                 <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest">Price</th>
-                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-right">Actions</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-right">Edit</th>
               </tr>
             </thead>
-            <tbody className="divide-y-2 divide-slate-100">
+            <tbody className="divide-y-2 divide-black/5">
               {products.map((p) => (
-                <tr key={p.id} className="group hover:bg-slate-50/50 transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="size-14 rounded-xl border-2 border-black overflow-hidden shrink-0">
-                        <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                <tr key={p.id} className="group hover:bg-slate-50 transition-colors">
+                  <td className="px-8 py-6 flex items-center gap-4">
+                      <div className="size-14 rounded-2xl border-2 border-black overflow-hidden shrink-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+                        <img src={p.image} alt={p.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                       </div>
-                      <span className="font-black uppercase tracking-tight text-lg">{p.name}</span>
-                    </div>
+                      <span className="font-black uppercase tracking-tight text-lg leading-tight">{p.name}</span>
                   </td>
-
+                  <td className="px-8 py-6 italic font-black text-xs uppercase text-slate-400">{p.condition}</td>
                   <td className="px-8 py-6">
-                    <span className="text-[10px] font-black uppercase px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg">
-                      {p.category}
+                    <span className={`text-[9px] font-black uppercase px-3 py-1 rounded-full border-2 ${STATUS_STYLE[p.status]}`}>
+                      {p.status}
                     </span>
                   </td>
-
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-sm font-black ${p.stock < 5 ? 'text-red-500' : 'text-slate-900'}`}>
-                        {p.stock} Units
-                      </span>
-                      {p.stock < 5 && (
-                        <div className="flex items-center gap-1 text-[10px] font-black text-red-500 uppercase bg-red-50 px-2 py-0.5 rounded animate-pulse">
-                          <AlertCircle size={10} /> Low
-                        </div>
-                      )}
-                    </div>
+                  <td className="px-8 py-6 font-black text-xl tracking-tighter text-center">{p.stock}</td>
+                  <td className="px-8 py-6 text-2xl font-black tracking-tighter italic">
+                    ₱{p.price.toLocaleString()}
                   </td>
-
-                  <td className="px-8 py-6">
-                    <span className="text-2xl font-black tracking-tighter">${p.price}</span>
-                  </td>
-
                   <td className="px-8 py-6 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="p-3 border-2 border-slate-100 rounded-xl hover:border-black hover:bg-black hover:text-white transition-all">
-                        <Edit3 size={16} />
-                      </button>
-                      <button className="p-3 border-2 border-slate-100 rounded-xl hover:border-red-500 hover:bg-red-500 hover:text-white transition-all text-slate-400">
-                        <Trash2 size={16} />
-                      </button>
-                      <button className="p-3 text-slate-300 hover:text-black">
-                        <MoreHorizontal size={20} />
-                      </button>
-                    </div>
+                    <button onClick={() => setEditingProduct(p)} className="p-3 border-2 border-black rounded-xl hover:bg-black hover:text-white transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none">
+                      <Edit3 size={16} strokeWidth={3} />
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      <div className="mt-8 flex justify-between items-center px-4">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-          Showing {products.length} Products in Total
-        </p>
-        <div className="flex gap-2">
-          {[1, 2, 3].map(n => (
-            <button key={n} className={`size-8 rounded-lg border-2 font-black text-[10px] flex items-center justify-center transition-all ${n === 1 ? 'border-black bg-black text-white' : 'border-slate-100 text-slate-400 hover:border-black'}`}>
-              {n}
-            </button>
-          ))}
         </div>
       </div>
     </div>
