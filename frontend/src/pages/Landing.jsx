@@ -47,10 +47,10 @@ export const Landing = () => {
           <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-24 items-center">
             <div className="border-l-8 border-black pl-12">
               <h2 className="text-7xl font-black tracking-tighter uppercase leading-[0.9] mb-8">Verified <br /> Students.</h2>
-              <p className="text-xl font-medium leading-relaxed mb-10 max-w-md text-gray-700">No scammers. No shipping fees. Meet at the library and trade face-to-face.</p>
+              <p className="text-xl font-medium leading-relaxed mb-10 max-w-md text-gray-700">No shipping fees. Meet anywhere at your university, face-to-face.</p>
               
               <div className="space-y-8">
-                {[ { icon: ShieldCheck, text: ".EDU Email Required" }, { icon: MapPin, text: "On-Campus Pickup" } ].map((item, i) => (
+                {[ { icon: ShieldCheck, text: "@student.apc.edu.ph Email Required" }, { icon: MapPin, text: "On-Campus Pickup" } ].map((item, i) => (
                   <div key={i} className="flex items-center gap-6 group">
                     <item.icon size={32} />
                     <span className="font-black uppercase tracking-widest text-sm group-hover:underline underline-offset-8">{item.text}</span>
@@ -73,7 +73,7 @@ export const Landing = () => {
               <div key={cat} className="group p-12 border-black border-r-2 last:border-r-0 flex flex-col justify-between hover:bg-black hover:text-white transition-all cursor-pointer h-72">
                 <Plus size={20} className="group-hover:rotate-90 transition-transform" />
                 <span className="text-4xl font-black uppercase tracking-tighter leading-none">{cat}</span>
-                <span className="font-black uppercase text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Browse</span>
+                <span className="font-black uppercase text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </div>
             ))}
           </div>

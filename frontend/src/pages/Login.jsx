@@ -14,16 +14,27 @@ export const Login = () => {
     setLoading(true);
     setError("");
 
-    try {
-      const response = await api.post("/login", { email, password });
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
 
-      // Store token and role
+    if (!trimmedEmail.endsWith("@student.apc.edu.ph")) {
+      setError("Please use your student email.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await api.post("/login", {
+        email: trimmedEmail,
+        password: trimmedPassword,
+      });
+
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
 
       navigate("/marketplace");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -44,7 +55,6 @@ export const Login = () => {
           </header>
 
           <form className="space-y-4" onSubmit={handleLogin}>
-            
             {/* Email */}
             <div>
               <label className="block text-[11px] uppercase tracking-[0.1em] font-black text-gray-400 mb-2 ml-1">
@@ -66,12 +76,6 @@ export const Login = () => {
                 <label className="text-[11px] uppercase tracking-[0.1em] font-black text-gray-400">
                   Password
                 </label>
-                <Link
-                  to="/forgot-password"
-                  className="text-[11px] uppercase tracking-wider font-bold text-gray-400 hover:text-black transition-colors"
-                >
-                  Forgot?
-                </Link>
               </div>
               <input
                 type="password"
