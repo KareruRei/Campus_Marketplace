@@ -55,7 +55,7 @@ export const SellerOrders = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-slate-50 overflow-hidden font-sans relative text-black selection:bg-yellow-200">
+    <div className="h-screen w-full overflow-hidden font-sans relative text-black selection:bg-yellow-200">
       <style>{scrollStyles}</style>
       
       <div className="max-w-5xl mx-auto h-full flex flex-col px-6 py-12">
@@ -75,7 +75,7 @@ export const SellerOrders = () => {
             animate={{ opacity: 1, x: 0 }}
             className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-none"
           >
-            Active <span className="text-transparent" style={{ WebkitTextStroke: '1.5px black' }}>Orders</span>
+            Active Orders
           </motion.h1>
         </header>
 

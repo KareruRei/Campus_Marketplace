@@ -38,6 +38,12 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
     navigate(nextPath);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsProfileOpen(false);
+    navigate("/login");
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-4 pointer-events-none">
       <div 
@@ -139,7 +145,10 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
                   exit={{ opacity: 0, scale: 0.9 }}
                   className="absolute right-0 mt-4 w-52 bg-white border-2 border-black rounded-[2rem] shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] overflow-hidden py-2 z-[60]"
                 >
-                  <button className="w-full flex items-center gap-3 px-5 py-3 hover:bg-red-500 hover:text-white text-red-500 text-xs font-black uppercase transition-colors">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-5 py-3 hover:bg-red-500 hover:text-white text-red-500 text-xs font-black uppercase transition-colors"
+                  >
                     <LogOut size={16} strokeWidth={3} /> Logout
                   </button>
                 </motion.div>
