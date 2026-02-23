@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+import api from "../api/axios";
 
 const AdminDashboard = () => {
+  const [stats, setStats] = useState({ total_users: 0, total_listings: 0, total_orders: 0, total_sales: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const response = await api.get('/admin/stats');
+      setStats(response.data.data || response.data);
+    } catch (err) {
+      console.error("Failed to fetch admin stats:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 size={48} className="animate-spin text-black" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-100">
 
@@ -41,35 +69,29 @@ const AdminDashboard = () => {
         <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
 
           <div className="bg-white shadow-md rounded-xl p-6">
             <h2 className="text-lg font-semibold">Total Users</h2>
-            <p className="text-3xl font-bold text-blue-600 mt-2">120</p>
+            <p className="text-3xl font-bold text-blue-600 mt-2">{stats.total_users}</p>
           </div>
 
           <div className="bg-white shadow-md rounded-xl p-6">
             <h2 className="text-lg font-semibold">Active Listings</h2>
-            <p className="text-3xl font-bold text-green-600 mt-2">58</p>
+            <p className="text-3xl font-bold text-green-600 mt-2">{stats.total_listings}</p>
           </div>
 
           <div className="bg-white shadow-md rounded-xl p-6">
-            <h2 className="text-lg font-semibold">Reported Items</h2>
-            <p className="text-3xl font-bold text-red-600 mt-2">5</p>
+            <h2 className="text-lg font-semibold">Total Orders</h2>
+            <p className="text-3xl font-bold text-orange-600 mt-2">{stats.total_orders}</p>
+          </div>
+
+          <div className="bg-white shadow-md rounded-xl p-6">
+            <h2 className="text-lg font-semibold">Total Sales</h2>
+            <p className="text-3xl font-bold text-emerald-600 mt-2">₱{parseFloat(stats.total_sales || 0).toLocaleString()}</p>
           </div>
 
         </div>
-
-        {/* Recent Activity Section */}
-        <div className="mt-10 bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-          <ul className="space-y-2 text-gray-700">
-            <li>User JohnDoe registered</li>
-            <li>New listing: Calculus Book</li>
-            <li>Listing reported by user Jane</li>
-          </ul>
-        </div>
-
       </main>
     </div>
   );

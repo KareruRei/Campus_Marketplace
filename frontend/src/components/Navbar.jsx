@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ShoppingBag, ShoppingCart, MessageCircle, 
-  Package, BarChart3, PlusCircle, Repeat, User, LogOut, Settings, ListOrdered 
+import {
+  ShoppingBag, ShoppingCart, MessageCircle,
+  Package, BarChart3, PlusCircle, Repeat, User, LogOut, Settings, ListOrdered
 } from 'lucide-react';
 
 import logoImg from '../assets/imgs/logo.png';
@@ -38,9 +38,16 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
     navigate(nextPath);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setIsProfileOpen(false);
+    navigate("/login");
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-4 pointer-events-none">
-      <div 
+      <div
         className={`flex items-center justify-between w-full max-w-7xl h-18 px-6 
                     backdrop-blur-3xl border-2 border-black shadow-2xl rounded-[2.5rem] 
                     transition-colors duration-500 pointer-events-auto relative
@@ -91,7 +98,7 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
                         />
                       )}
                     </AnimatePresence>
-                    
+
                     <span className="relative z-10 flex items-center gap-3">
                       {item.icon}
                       <span className="hidden sm:inline">{item.name}</span>
@@ -105,7 +112,7 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
 
         {/* Action Zone */}
         <div className="flex items-center gap-3">
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleModeSwitch}
@@ -124,9 +131,8 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
           <div className="relative">
             <motion.button
               onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className={`size-12 rounded-2xl border-2 flex items-center justify-center transition-all shadow-sm ${
-                isProfileOpen ? 'border-black bg-black text-white' : 'border-black bg-white/50 text-black'
-              }`}
+              className={`size-12 rounded-2xl border-2 flex items-center justify-center transition-all shadow-sm ${isProfileOpen ? 'border-black bg-black text-white' : 'border-black bg-white/50 text-black'
+                }`}
             >
               <User size={22} />
             </motion.button>
@@ -139,7 +145,10 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
                   exit={{ opacity: 0, scale: 0.9 }}
                   className="absolute right-0 mt-4 w-52 bg-white border-2 border-black rounded-[2rem] shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] overflow-hidden py-2 z-[60]"
                 >
-                  <button className="w-full flex items-center gap-3 px-5 py-3 hover:bg-red-500 hover:text-white text-red-500 text-xs font-black uppercase transition-colors">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-5 py-3 hover:bg-red-500 hover:text-white text-red-500 text-xs font-black uppercase transition-colors"
+                  >
                     <LogOut size={16} strokeWidth={3} /> Logout
                   </button>
                 </motion.div>

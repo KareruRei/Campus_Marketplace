@@ -16,7 +16,7 @@ export const Landing = () => {
   return (
     <div className="min-h-screen text-black font-sans selection:bg-black selection:text-white">
       <main className="relative">
-        
+
         {/* --- HERO SECTION --- */}
         <section className="h-screen flex flex-col items-center justify-center px-8 text-center max-w-[1400px] mx-auto border-b-2 border-black">
           <motion.div {...fadeInUp} className="mb-12">
@@ -30,7 +30,7 @@ export const Landing = () => {
 
           <motion.div {...fadeInUp} transition={{ delay: 0.4 }} className="mt-12 flex flex-col items-center gap-12">
             <p className="text-xl font-bold uppercase tracking-tighter max-w-xl">A private marketplace for your university.</p>
-            
+
             <div className="flex flex-col md:flex-row gap-4">
               <button onClick={() => navigate('/marketplace')} className="group border-4 border-black px-12 py-5 font-black uppercase tracking-widest flex items-center gap-3 hover:bg-black hover:text-white transition-all active:scale-95">
                 Enter Market <ArrowRight size={20} />
@@ -47,10 +47,10 @@ export const Landing = () => {
           <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-24 items-center">
             <div className="border-l-8 border-black pl-12">
               <h2 className="text-7xl font-black tracking-tighter uppercase leading-[0.9] mb-8">Verified <br /> Students.</h2>
-              <p className="text-xl font-medium leading-relaxed mb-10 max-w-md text-gray-700">No scammers. No shipping fees. Meet at the library and trade face-to-face.</p>
-              
+              <p className="text-xl font-medium leading-relaxed mb-10 max-w-md text-gray-700">No shipping fees. Meet anywhere at your university, face-to-face.</p>
+
               <div className="space-y-8">
-                {[ { icon: ShieldCheck, text: ".EDU Email Required" }, { icon: MapPin, text: "On-Campus Pickup" } ].map((item, i) => (
+                {[{ icon: ShieldCheck, text: "@student.apc.edu.ph Email Required" }, { icon: MapPin, text: "On-Campus Pickup" }].map((item, i) => (
                   <div key={i} className="flex items-center gap-6 group">
                     <item.icon size={32} />
                     <span className="font-black uppercase tracking-widest text-sm group-hover:underline underline-offset-8">{item.text}</span>
@@ -60,8 +60,8 @@ export const Landing = () => {
             </div>
 
             <div className="border-4 border-black p-8 relative">
-                <div className="absolute -top-4 -left-4 bg-white border-2 border-black px-4 py-1 font-black uppercase text-[10px]">Live Feed</div>
-                <CardStack />
+              <div className="absolute -top-4 -left-4 bg-white border-2 border-black px-4 py-1 font-black uppercase text-[10px]">Live Feed</div>
+              <CardStack />
             </div>
           </div>
         </section>
@@ -73,7 +73,7 @@ export const Landing = () => {
               <div key={cat} className="group p-12 border-black border-r-2 last:border-r-0 flex flex-col justify-between hover:bg-black hover:text-white transition-all cursor-pointer h-72">
                 <Plus size={20} className="group-hover:rotate-90 transition-transform" />
                 <span className="text-4xl font-black uppercase tracking-tighter leading-none">{cat}</span>
-                <span className="font-black uppercase text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Browse</span>
+                <span className="font-black uppercase text-[10px] tracking-widest opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </div>
             ))}
           </div>
