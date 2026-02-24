@@ -34,7 +34,7 @@ export const Navbar = ({ cartCount = 0, messageCount = 0 }) => {
 
   const handleModeSwitch = () => {
     const nextMode = viewMode === 'buyer' ? 'seller' : 'buyer';
-    const nextPath = nextMode === 'seller' ? '/seller/dashboard' : '/';
+    const nextPath = nextMode === 'seller' ? '/seller/dashboard' : '/marketplace';
     navigate(nextPath);
   };
 

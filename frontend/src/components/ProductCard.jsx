@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 
 export const ProductCard = ({
+  id,
   title,
   price,
   category,
@@ -25,6 +26,38 @@ export const ProductCard = ({
     e.stopPropagation();
     setIsOpen(!isOpen);
   };
+
+  const handleAddToCart = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("http://127.0.0.1:8000/cart/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          product_id: id,
+          quantity: 1
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to add to cart");
+      }
+
+      alert("Added to cart successfully!");
+      setIsOpen(false);
+
+    } catch (error) {
+      console.error("Add to cart error:", error);
+      alert(error.message);
+    }
+  };
+
 
   return (
     <>
@@ -77,8 +110,7 @@ export const ProductCard = ({
             </button>
 
             <div className="md:w-[55%] bg-[#f4f4f4] overflow-y-auto scrollbar-hide">
-              <img src={productImage} alt={title} className="w-full object-cover" />
-              <img src={productImage} alt="Gallery" className="w-full object-cover opacity-80" />
+              <img src={productImage} alt={title} className="h-full object-cover" />
             </div>
 
             <div className="md:w-[45%] p-8 md:p-12 flex flex-col bg-white">
@@ -107,19 +139,12 @@ export const ProductCard = ({
               </div>
 
               <div className="space-y-3 mt-auto">
-                <div className="flex-1 border border-black py-4 text-center text-xs font-bold hover:bg-black hover:text-white transition-colors cursor-pointer uppercase tracking-widest">
-                  Select Size
-                </div>
 
-                <button className="w-full bg-black text-white py-5 text-sm font-bold tracking-[0.2em] hover:bg-zinc-800 transition-all uppercase">
-                  Add to Bag
-                </button>
-
-                <button className="w-full border border-gray-200 py-4 text-xs font-bold tracking-widest 
-                  hover:border-black hover:bg-black hover:text-white transition-all uppercase 
-                  text-gray-500 flex items-center justify-center gap-2">
-                  <Star size={16} />
-                  Add to Favorites
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full bg-black text-white py-5 text-sm font-bold tracking-[0.2em] hover:bg-zinc-800 transition-all uppercase"
+                >
+                  Add to Cart
                 </button>
               </div>
             </div>
