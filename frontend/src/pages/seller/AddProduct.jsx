@@ -5,21 +5,23 @@ import api from '../../api/axios';
 
 export default function AddProduct() {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState('electronics');
+  const [selectedCategory, setSelectedCategory] = useState(2); // default to Tech (id=2)
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('1');
   const [description, setDescription] = useState('');
+  const [condition, setCondition] = useState('New');
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
+  // category IDs must match the `categories` table in the database
   const categories = [
-    { id: 'electronics', label: 'Tech', icon: <Smartphone size={20} /> },
-    { id: 'wearables', label: 'Watch', icon: <Watch size={20} /> },
-    { id: 'accessories', label: 'Gear', icon: <Box size={20} /> },
-    { id: 'fashion', label: 'Style', icon: <Shirt size={20} /> },
+    { id: 2, label: 'Tech', icon: <Smartphone size={20} /> },
+    { id: 4, label: 'Apparel', icon: <Shirt size={20} /> },
+    { id: 3, label: 'Furniture', icon: <Box size={20} /> },
+    { id: 5, label: 'Supplies', icon: <Watch size={20} /> },
   ];
 
   const handleImageChange = (e) => {
@@ -37,11 +39,13 @@ export default function AddProduct() {
 
     try {
       const formData = new FormData();
-      formData.append('name', name);
+      formData.append('title', name);
       formData.append('price', price);
-      formData.append('stock_quantity', stock);
+      formData.append('stock', stock);
       formData.append('description', description);
-      formData.append('category', selectedCategory);
+      formData.append('category_id', selectedCategory);
+      formData.append('condition', condition);
+      formData.append('hours_to_sell', 72); // default 3-day listing
       if (image) {
         formData.append('image', image);
       }
@@ -53,8 +57,13 @@ export default function AddProduct() {
       navigate('/seller/inventory');
     } catch (err) {
       console.error("Failed to create listing:", err);
-      const msg = err.response?.data?.message || 'Failed to create listing. Please try again.';
-      setError(msg);
+      const data = err.response?.data;
+      if (data?.errors) {
+        const firstError = Object.values(data.errors)[0];
+        setError(Array.isArray(firstError) ? firstError[0] : firstError);
+      } else {
+        setError(data?.message || 'Failed to create listing. Please try again.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -138,6 +147,26 @@ export default function AddProduct() {
               </div>
             </div>
 
+            {/* Condition */}
+            <div>
+              <label className="text-[10px] font-black uppercase tracking-widest mb-4 block text-slate-400">Condition</label>
+              <div className="flex gap-3">
+                {['New', 'Used'].map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setCondition(c)}
+                    className={`px-6 py-3 rounded-xl border-2 border-black font-black uppercase text-sm tracking-wider transition-all
+                      ${condition === c
+                        ? 'bg-black text-white'
+                        : 'bg-white text-black hover:bg-slate-100'}`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Price & Stock */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -173,6 +202,7 @@ export default function AddProduct() {
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full p-5 border-2 border-black rounded-2xl font-bold focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] outline-none transition-all resize-none"
                 placeholder="Details..."
+                required
               ></textarea>
             </div>
 

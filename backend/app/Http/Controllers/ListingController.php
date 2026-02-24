@@ -41,7 +41,7 @@ class ListingController extends Controller
             'stock' => $request->stock,
             'condition' => $request->condition,
             'image_path' => $imagePath,
-            'expires_at' => Carbon::now()->addHours($request->hours_to_sell),
+            'expires_at' => Carbon::now()->addHours((int) $request->hours_to_sell),
             'status' => 'Active',
         ]);
 
