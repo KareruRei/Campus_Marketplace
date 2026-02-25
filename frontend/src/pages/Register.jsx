@@ -42,7 +42,7 @@ export const Register = () => {
     }
 
     try {
-      const response = await api.post("/register", form);
+      const response = await api.post("/register", form); 
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
