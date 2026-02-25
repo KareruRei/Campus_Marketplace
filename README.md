@@ -62,7 +62,9 @@ The system is composed of:
 
 <h2>System Architecture</h2>
 
-
+<a href="docs/system-architecure.pdf" download>
+<strong>Download System Architecture</strong>
+</a>
 
 <h3>Architecture Flow</h3>
 <ol>
@@ -104,12 +106,9 @@ It communicates with the Laravel backend via Axios HTTP requests.
 <h2>Entity Relationship Diagram (ERD)</h2>
 
 
-
-<p>
-<a href="docs/ERD-CampusMarketplace.pdf" download>
+<a href="docs/ERD.pdf" download>
 <strong>Download ERD</strong>
 </a>
-</p>
 
 <h3>Core Database Tables</h3>
 <ul>
