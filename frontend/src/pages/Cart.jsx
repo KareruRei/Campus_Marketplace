@@ -25,12 +25,14 @@ export const Cart = () => {
       const items = response.data.data || response.data;
       setCartItems(Array.isArray(items) ? items.map(item => ({
         id: item.id,
-        product_id: item.product_id || item.listing_id,
-        title: item.product?.name || item.listing?.name || item.name || 'Product',
-        category: item.product?.category?.name || item.listing?.category?.name || '',
-        price: parseFloat(item.product?.price || item.listing?.price || item.price || 0),
+        listing_id: item.listing_id,
+        title: item.listing?.title || item.listing?.name || 'Product',
+        category: item.listing?.category?.name || '',
+        price: parseFloat(item.listing?.price || item.price || 0),
         quantity: item.quantity || 1,
-        image: item.product?.image_path || item.listing?.image_path || 'https://picsum.photos/300/400',
+        image: item.listing?.image_path
+          ? `http://127.0.0.1:8000/storage/${item.listing.image_path}`
+          : 'https://picsum.photos/300/400',
       })) : []);
     } catch (err) {
       console.error("Failed to fetch cart:", err);

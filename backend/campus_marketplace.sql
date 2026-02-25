@@ -41,10 +41,8 @@ CREATE TABLE `users` (
   `email` VARCHAR(255) NOT NULL UNIQUE,
   `email_verified_at` TIMESTAMP NULL DEFAULT NULL,
   `password` VARCHAR(255) NOT NULL,
-  `phone` VARCHAR(255) NULL DEFAULT NULL,
   `role` ENUM('user', 'admin') NOT NULL DEFAULT 'user',
   `is_banned` TINYINT(1) NOT NULL DEFAULT 0,
-  `rating` DECIMAL(3,2) NOT NULL DEFAULT 0.00,
   `sales_count` INT NOT NULL DEFAULT 0,
   `remember_token` VARCHAR(100) NULL DEFAULT NULL,
   `created_at` TIMESTAMP NULL DEFAULT NULL,
@@ -225,11 +223,8 @@ INSERT INTO `student_registry` (`student_id`, `full_name`, `email`, `created_at`
 ('2024-100002', 'Jane Smith',         'jsmith@student.apc.edu.ph',       NOW(), NOW()),
 ('2024-100003', 'John Doe',           'jdoe@student.apc.edu.ph',         NOW(), NOW()),
 ('2025-100001', 'JD Gonzales',        'jdgonzales3@student.apc.edu.ph',  NOW(), NOW()),
-('2025-100002', 'JD Gonzales Alt',    'jdgonzales2@student.apc.edu.ph',  NOW(), NOW()),
-('2025-100003', 'Test User Three',    'test3@student.apc.edu.ph',        NOW(), NOW()),
-('2025-100004', 'Test User Four',     'test4@student.apc.edu.ph',        NOW(), NOW()),
-('2025-100005', 'Test User Five',     'test5@student.apc.edu.ph',        NOW(), NOW()),
 ('2026-100001', 'New Student 2026',   'new2026@student.apc.edu.ph',      NOW(), NOW());
+('2026-100002', 'Marcus De Leon',     'mdl@student.apc.edu.ph',          NOW(), NOW());
 
 
 -- =====================================================
@@ -240,6 +235,6 @@ INSERT INTO `categories` (`name`, `slug`, `created_at`, `updated_at`) VALUES
 ('Tech',        'tech',         NOW(), NOW()),
 ('Furniture',   'furniture',    NOW(), NOW()),
 ('Apparel',     'apparel',      NOW(), NOW()),
-('Supplies',    'supplies',     NOW(), NOW()),
+('Supplies',    'supplies',     NOW(), NOW()),S
 ('Food',        'food',         NOW(), NOW()),
 ('Other',       'other',        NOW(), NOW());

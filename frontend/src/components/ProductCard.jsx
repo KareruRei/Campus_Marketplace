@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Star } from 'lucide-react';
+import { ShoppingCart, Loader2, Check } from 'lucide-react';
+import api from '../api/axios';
 
 export const ProductCard = ({
+  id,
   title,
   price,
   category,
@@ -19,11 +21,33 @@ export const ProductCard = ({
   const sellerName = typeof seller === 'object' ? seller?.name : seller;
   const productImage = image || image_url;
   const displayDate = dateAdded || (created_at ? new Date(created_at).toLocaleDateString() : 'Today');
+
   const [isOpen, setIsOpen] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [cartError, setCartError] = useState(null);
 
   const toggleModal = (e) => {
     e.stopPropagation();
     setIsOpen(!isOpen);
+    setCartError(null);
+    setAdded(false);
+  };
+
+  const handleAddToCart = async (e) => {
+    e.stopPropagation();
+    setAdding(true);
+    setCartError(null);
+    try {
+      await api.post('/cart', { listing_id: id, quantity: 1 });
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Failed to add to cart.';
+      setCartError(msg);
+    } finally {
+      setAdding(false);
+    }
   };
 
   return (
@@ -52,9 +76,9 @@ export const ProductCard = ({
             {title}
           </h3>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-black">₱{price}</span>
+            <span className="text-sm font-bold text-black">₱{parseFloat(price).toLocaleString()}</span>
             <span className="text-[10px] text-gray-400 font-semibold uppercase">
-              {displayDate}
+              {condition || displayDate}
             </span>
           </div>
         </div>
@@ -78,7 +102,6 @@ export const ProductCard = ({
 
             <div className="md:w-[55%] bg-[#f4f4f4] overflow-y-auto scrollbar-hide">
               <img src={productImage} alt={title} className="w-full object-cover" />
-              <img src={productImage} alt="Gallery" className="w-full object-cover opacity-80" />
             </div>
 
             <div className="md:w-[45%] p-8 md:p-12 flex flex-col bg-white">
@@ -97,29 +120,56 @@ export const ProductCard = ({
                 <span>{displayDate}</span>
               </div>
 
-              <p className="text-2xl font-light text-black mb-8">₱{price}</p>
+              <p className="text-2xl font-light text-black mb-2">₱{parseFloat(price).toLocaleString()}</p>
+
+              {condition && (
+                <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-6">
+                  Condition: {condition}
+                </span>
+              )}
 
               <div className="border-t border-gray-100 py-6 mb-4">
                 <p className="text-[11px] font-bold uppercase tracking-widest mb-3">Description</p>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  {description || "A modern wardrobe staple. Expertly crafted with premium materials for a tailored fit and maximum comfort. Perfect for any occasion."}
+                  {description || "No description provided."}
                 </p>
               </div>
 
-              <div className="space-y-3 mt-auto">
-                <div className="flex-1 border border-black py-4 text-center text-xs font-bold hover:bg-black hover:text-white transition-colors cursor-pointer uppercase tracking-widest">
-                  Select Size
+              {stock > 0 && (
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-4">
+                  {stock} in stock
+                </p>
+              )}
+
+              {cartError && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs font-bold">
+                  {cartError}
                 </div>
+              )}
 
-                <button className="w-full bg-black text-white py-5 text-sm font-bold tracking-[0.2em] hover:bg-zinc-800 transition-all uppercase">
-                  Add to Bag
-                </button>
-
-                <button className="w-full border border-gray-200 py-4 text-xs font-bold tracking-widest 
-                  hover:border-black hover:bg-black hover:text-white transition-all uppercase 
-                  text-gray-500 flex items-center justify-center gap-2">
-                  <Star size={16} />
-                  Add to Favorites
+              <div className="mt-auto">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={adding || added}
+                  className={`w-full py-5 rounded-xl text-sm font-bold tracking-[0.2em] uppercase transition-all flex items-center justify-center gap-3
+                    ${added
+                      ? 'bg-green-500 text-white'
+                      : 'bg-black text-white hover:bg-zinc-800 active:scale-[0.98]'}
+                    disabled:cursor-not-allowed`}
+                >
+                  {adding ? (
+                    <Loader2 size={20} className="animate-spin" />
+                  ) : added ? (
+                    <>
+                      <Check size={20} strokeWidth={3} />
+                      Added to Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart size={20} />
+                      Add to Cart
+                    </>
+                  )}
                 </button>
               </div>
             </div>

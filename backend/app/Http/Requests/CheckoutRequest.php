@@ -14,7 +14,7 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'meetup_schedule' => ['required', 'date', 'after:now'],
+            'meetup_schedule' => ['nullable', 'date', 'after:now'],
         ];
     }
 

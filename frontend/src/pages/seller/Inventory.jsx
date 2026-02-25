@@ -3,22 +3,11 @@ import { Edit3, X, Minus, Plus, Loader2, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../api/axios';
 
-// --- TABLE-SPECIFIC CHUNKY SCROLLBAR ---
 const tableScrollStyles = `
-  .custom-table-scrollbar::-webkit-scrollbar {
-    width: 12px;
-  }
-  .custom-table-scrollbar::-webkit-scrollbar-track {
-    background: #ffffff;
-    border-left: 2px solid black;
-  }
-  .custom-table-scrollbar::-webkit-scrollbar-thumb {
-    background: black;
-    border: 2px solid #ffffff;
-  }
-  .custom-table-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #333;
-  }
+  .custom-table-scrollbar::-webkit-scrollbar { width: 12px; }
+  .custom-table-scrollbar::-webkit-scrollbar-track { background: #ffffff; border-left: 2px solid black; }
+  .custom-table-scrollbar::-webkit-scrollbar-thumb { background: black; border: 2px solid #ffffff; }
+  .custom-table-scrollbar::-webkit-scrollbar-thumb:hover { background: #333; }
 `;
 
 export default function Inventory() {
@@ -49,7 +38,8 @@ export default function Inventory() {
         name: l.title || l.name,
         price: parseFloat(l.price || 0),
         stock: l.stock || 0,
-        category: l.category?.name || '',
+        category: l.category?.name || l.category || '', // Updated to handle object or string
+        description: l.description || '', // Added description field
         condition: l.condition || 'New',
         status: l.status || 'Active',
         image: l.image_url || 'https://picsum.photos/200/200',
@@ -64,7 +54,7 @@ export default function Inventory() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      // Update locally first for responsiveness
+      // Logic for API call would go here: await api.put(`/listings/${editingProduct.id}`, editingProduct);
       setProducts(products.map(p => p.id === editingProduct.id ? editingProduct : p));
       setEditingProduct(null);
     } catch (err) {
@@ -94,7 +84,6 @@ export default function Inventory() {
     <div className="max-w-7xl mx-auto p-8 lg:p-12 pt-32 text-black relative font-sans h-screen overflow-hidden">
       <style>{tableScrollStyles}</style>
 
-      {/* --- EDIT MODAL --- */}
       <AnimatePresence>
         {editingProduct && (
           <div className="fixed inset-0 z-[150] flex items-center justify-end">
@@ -118,7 +107,8 @@ export default function Inventory() {
                 </button>
               </div>
 
-              <form onSubmit={handleUpdate} className="px-10 space-y-8 overflow-y-auto flex-1 custom-table-scrollbar">
+              <form onSubmit={handleUpdate} className="px-10 space-y-6 overflow-y-auto flex-1 custom-table-scrollbar pb-10">
+                {/* NAME */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Product Name</label>
                   <input
@@ -129,7 +119,31 @@ export default function Inventory() {
                   />
                 </div>
 
-                {/* --- QUANTITY MODIFY SECTION --- */}
+                {/* CATEGORY - NEW */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Category</label>
+                  <input
+                    type="text"
+                    value={editingProduct.category}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
+                    className="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-black rounded-2xl font-bold outline-none transition-all"
+                    placeholder="e.g. Footwear, Electronics"
+                  />
+                </div>
+
+                {/* DESCRIPTION - NEW */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Description</label>
+                  <textarea
+                    rows={4}
+                    value={editingProduct.description}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+                    className="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-black rounded-2xl font-bold outline-none transition-all resize-none"
+                    placeholder="Enter item details..."
+                  />
+                </div>
+
+                {/* STOCK */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Stock Quantity</label>
                   <div className="flex items-center gap-4">
@@ -140,7 +154,6 @@ export default function Inventory() {
                     >
                       <Minus size={20} strokeWidth={4} />
                     </button>
-
                     <div className="flex-1">
                       <input
                         type="number"
@@ -149,7 +162,6 @@ export default function Inventory() {
                         className="w-full text-center p-4 bg-slate-50 border-4 border-black rounded-2xl font-black text-xl outline-none"
                       />
                     </div>
-
                     <button
                       type="button"
                       onClick={() => setEditingProduct({ ...editingProduct, stock: editingProduct.stock + 1 })}
@@ -171,6 +183,7 @@ export default function Inventory() {
         )}
       </AnimatePresence>
 
+      {/* Rest of the Table UI remains same as your original snippet... */}
       <header className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16 px-4">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Marketly/Inventory</p>
@@ -178,7 +191,6 @@ export default function Inventory() {
         </div>
       </header>
 
-      {/* --- THE SCROLLABLE TABLE CONTAINER --- */}
       <div className="border-4 border-black rounded-[2.5rem] bg-white overflow-hidden shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] mx-4">
         <div className="overflow-x-auto overflow-y-auto max-h-[380px] custom-table-scrollbar">
           <table className="w-full text-left border-collapse">
@@ -193,13 +205,16 @@ export default function Inventory() {
               </tr>
             </thead>
             <tbody className="divide-y-2 divide-black/5">
-              {products.length > 0 ? products.map((p) => (
+              {products.map((p) => (
                 <tr key={p.id} className="group hover:bg-slate-50 transition-colors">
                   <td className="px-8 py-6 flex items-center gap-4">
                     <div className="size-14 rounded-2xl border-2 border-black overflow-hidden shrink-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
                       <img src={p.image} alt={p.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                     </div>
-                    <span className="font-black uppercase tracking-tight text-lg leading-tight">{p.name}</span>
+                    <div className="flex flex-col">
+                      <span className="font-black uppercase tracking-tight text-lg leading-tight">{p.name}</span>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase">{p.category}</span>
+                    </div>
                   </td>
                   <td className="px-8 py-6 italic font-black text-xs uppercase text-slate-400">{p.condition}</td>
                   <td className="px-8 py-6">
@@ -208,9 +223,7 @@ export default function Inventory() {
                     </span>
                   </td>
                   <td className="px-8 py-6 font-black text-xl tracking-tighter text-center">{p.stock}</td>
-                  <td className="px-8 py-6 text-2xl font-black tracking-tighter italic">
-                    ₱{p.price.toLocaleString()}
-                  </td>
+                  <td className="px-8 py-6 text-2xl font-black tracking-tighter italic">₱{p.price.toLocaleString()}</td>
                   <td className="px-8 py-6 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button onClick={() => setEditingProduct(p)} className="p-3 border-2 border-black rounded-xl hover:bg-black hover:text-white transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:shadow-none">
@@ -222,13 +235,7 @@ export default function Inventory() {
                     </div>
                   </td>
                 </tr>
-              )) : (
-                <tr>
-                  <td colSpan="6" className="px-8 py-20 text-center font-black uppercase tracking-widest text-slate-300">
-                    No listings yet
-                  </td>
-                </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>

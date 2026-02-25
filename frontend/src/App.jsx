@@ -19,6 +19,10 @@ import { Cart } from './pages/Cart';
 import { Messages } from './pages/Messages';
 import { Transactions } from './pages/Transactions';
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminListings from "./pages/admin/AdminListings";
+import AdminReports from "./pages/admin/AdminReports";
+import AdminLogs from "./pages/admin/AdminLogs";
 
 function App() {
 
@@ -77,6 +81,38 @@ function App() {
                     element={
                       <AdminRoute>
                         <AdminDashboard />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="admin/users"
+                    element={
+                      <AdminRoute>
+                        <AdminUsers />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="admin/listings"
+                    element={
+                      <AdminRoute>
+                        <AdminListings />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="admin/reports"
+                    element={
+                      <AdminRoute>
+                        <AdminReports />
+                      </AdminRoute>
+                    }
+                  />
+                  <Route
+                    path="admin/logs"
+                    element={
+                      <AdminRoute>
+                        <AdminLogs />
                       </AdminRoute>
                     }
                   />

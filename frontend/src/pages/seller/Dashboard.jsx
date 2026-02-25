@@ -218,7 +218,7 @@ export default function SellerDashboard() {
               <span className="text-[10px] font-black px-3 py-1 bg-white border border-black rounded-full uppercase tracking-tight">{stat.growth}</span>
             </div>
             <p className="text-xs text-slate-500 font-black uppercase tracking-widest">{stat.label}</p>
-            <p className={`text-5xl font-black tracking-tighter mt-2 ${stat.color}`}>{stat.value}</p>
+            <p className={`text-5xl font-black tracking-tighter mt-2 philippinePeso{stat.color}`}>{stat.value}</p>
           </div>
         ))}
 

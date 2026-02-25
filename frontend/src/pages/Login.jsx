@@ -32,7 +32,12 @@ export const Login = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
 
-      navigate("/marketplace");
+      // Redirect admin to admin dashboard, regular users to marketplace
+      if (response.data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/marketplace");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Please try again.");
     } finally {

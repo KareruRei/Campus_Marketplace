@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
             $table->enum('status', ['PREPARING', 'PACKED', 'FOR PICKUP', 'COMPLETED'])->default('PREPARING');
             $table->decimal('total_amount', 10, 2);
-            $table->dateTime('meetup_schedule');
+            $table->dateTime('meetup_schedule')->nullable();
             $table->timestamps();
         });
     }

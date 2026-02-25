@@ -1259,7 +1259,7 @@ class TestResponse implements ArrayAccess
     }
 
     /**
-     * Get the JSON decoded body of the response as a collection.
+     * Get the decoded JSON body of the response as a collection.
      *
      * @param  string|null  $key
      * @return \Illuminate\Support\Collection
@@ -1564,12 +1564,22 @@ class TestResponse implements ArrayAccess
      */
     public function assertSessionHasAll(array $bindings)
     {
+        $actual = [];
+        $expected = [];
+
         foreach ($bindings as $key => $value) {
             if (is_int($key)) {
                 $this->assertSessionHas($value);
-            } else {
+            } elseif ($value instanceof Closure) {
                 $this->assertSessionHas($key, $value);
+            } else {
+                $expected[$key] = $value;
+                $actual[$key] = $this->session()->get($key);
             }
+        }
+
+        if (! empty($expected)) {
+            PHPUnit::withResponse($this)->assertEquals($expected, $actual);
         }
 
         return $this;

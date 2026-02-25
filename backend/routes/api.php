@@ -61,7 +61,13 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::middleware('admin')->prefix('admin')->group(function () {
         Route::get('/stats', [AdminController::class, 'stats']);
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::get('/listings', [AdminController::class, 'listings']);
+        Route::get('/reports', [AdminController::class, 'reports']);
+        Route::put('/reports/{id}', [AdminController::class, 'updateReport']);
+        Route::get('/logs', [AdminController::class, 'logs']);
         Route::delete('/listings/{id}', [AdminController::class, 'deleteListing']);
         Route::post('/ban/{id}', [AdminController::class, 'banUser']);
+        Route::post('/unban/{id}', [AdminController::class, 'unbanUser']);
     });
 });

@@ -16,26 +16,29 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
-        // 1. Check student_id against student_registry table
-        $inRegistry = StudentRegistry::where('student_id', $validated['student_id'])->exists();
-
-        if (!$inRegistry) {
-            return response()->json([
-                'message' => 'The student ID provided is not found in our student records.'
-            ], 400);
-        }
-
-        // 2. Combine first_name + last_name into name
+        // 1. Combine first_name + last_name into full name
         $fullName = trim($validated['first_name'] . ' ' . $validated['last_name']);
 
-        // 3. Create User
+        // 2. Add student to student_registry if not already there (FK requirement)
+        //    If they already exist in the registry, this is a no-op.
+        StudentRegistry::updateOrCreate(
+            ['student_id' => $validated['student_id']],
+            [
+                'full_name' => $fullName,
+                'email'     => $validated['email'],
+            ]
+        );
+
+        // 3. Create User account
+        //    (RegisterRequest already validates unique:users,student_id and unique:users,email
+        //     so if they already registered, they get "This student ID is already registered.")
         $user = User::create([
             'student_id' => $validated['student_id'],
-            'name' => $fullName,
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'phone' => $request->phone,
-            'role' => 'user',
+            'name'       => $fullName,
+            'email'      => $validated['email'],
+            'password'   => $validated['password'],
+            'phone'      => $request->phone,
+            'role'       => 'user',
         ]);
 
         // 4. Return Sanctum token
