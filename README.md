@@ -114,9 +114,8 @@ It communicates with the Laravel backend via Axios HTTP requests.
 <h3>Core Database Tables</h3>
 <ul>
     <li><strong>users</strong></li>
-    <li><strong>products</strong></li>
+    <li><strong>listings</strong></li>
     <li><strong>categories</strong></li>
-    <li><strong>personal_access_tokens</strong></li>
 </ul>
 
 <hr>
