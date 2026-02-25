@@ -46,13 +46,13 @@ export default function Inventory() {
       const listings = response.data.data || response.data;
       setProducts(Array.isArray(listings) ? listings.map(l => ({
         id: l.id,
-        name: l.name || l.title,
+        name: l.title || l.name,
         price: parseFloat(l.price || 0),
-        stock: l.stock_quantity || l.stock || 0,
+        stock: l.stock || 0,
         category: l.category?.name || '',
         condition: l.condition || 'New',
-        status: l.is_deleted ? 'Removed' : (l.stock_quantity > 0 || l.stock > 0) ? 'Active' : 'Sold',
-        image: l.image_path || 'https://picsum.photos/200/200',
+        status: l.status || 'Active',
+        image: l.image_url || 'https://picsum.photos/200/200',
       })) : []);
     } catch (err) {
       console.error("Failed to fetch listings:", err);
