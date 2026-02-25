@@ -62,7 +62,7 @@ The system is composed of:
 
 <h2>System Architecture</h2>
 
-<a href="docs/system-architecure.pdf" download>
+<a href="docs/system-architecture.pdf" download>
 <strong>Download System Architecture</strong>
 </a>
 
